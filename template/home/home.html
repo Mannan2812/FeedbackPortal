@@ -1,0 +1,235 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Home</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <link rel="manifest" href="site.webmanifest">
+		<link rel="shortcut icon" type="image/x-icon" href="{% static 'home/img/favicon.ico">
+		<!-- CSS here -->
+            <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/owl.carousel.min.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/flaticon.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/slicknav.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/animate.min.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/magnific-popup.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/fontawesome-all.min.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/themify-icons.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/slick.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/nice-select.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+            <link rel="stylesheet" href="{% static 'home/css/custom.css' %}">
+   </head>
+
+   <body>
+
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="{% static 'home/img/logo/pec_logo.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
+
+    <header>
+        <!-- Header Start -->
+       <div class="header-area">
+            <div class="main-header header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-2">
+                          <div class="logo">
+                              <a href="{% url 'home:homepage' %}"><img src="{% static 'home/img/logo/pec_logo.png' %}" alt=""></a>
+                          </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 col-md-10">
+                            <!-- Main-menu -->
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li class = "active_nav_bar"><a style="font-size: 25px;color:purple;" href="{% url 'home:homepage' %}">Hello, {{user.name}}</a></li>
+                                        <li><a href="{% url 'authenticate:edit_profile' %}">Profile</a></li>
+                                        <li><a href="{% url 'authenticate:logout' %}">Log Out</a></li>
+                                          <li><a href="{% url 'authenticate:change_password' %}">Change Password</a></li>
+
+
+                                          <li><img style = "height:80px;width:80px;" class="rounded-circle border border-dark" src="http://127.0.0.1:8000/media/profile_pic/{{ image }}" alt= "profile_pic" ></li>
+
+                                    </ul>
+
+
+
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       </div>
+        <!-- Header End -->
+    </header>
+
+    <main>
+
+        <!-- Contact form Start -->
+        {% if message %}
+        <div class="container">
+        <div style="background-color:#98FB98;" class="alert alert-warning alert-dismissible fade show" role="alert">
+     <strong>Hurray!</strong> Your Password changed successfully.
+     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+      </div>
+   </div>
+        {% endif %}
+
+         <div class="brand-area">
+            <div class="container">
+                 <!-- section tittle -->
+                 <div class="row ">
+                    <div class="col-lg-12">
+                        <div class="section-tittle text-center">
+                            <!-- <img src="{% static 'home/img/memories/section_tittle_flowre.png' %}" alt=""> -->
+                            <h2>FEEDBACKS RECEIVED BY YOU</h2>
+                        {% if feedbacks %}
+    <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Index</th>
+      <th scope="col">Course Code</th>
+      <th scope="col">Feedback</th>
+      <th scope="col">Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for i,val in feedbacks.items %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ i.course_code }}</td>
+
+      <td>
+        <form class="form" action="{% url 'home:feedback_form_display' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="form_data" value="{{ val.1 }}">
+          <button type="submit" name="button" class="btn" style="background:gray; padding:15px;" >
+            {{ i.comment|slice:"0:30" }}  ...
+          </button>
+        </form>
+      <td>
+      {% for itr in val.0 %}
+      <span class="{{itr}}"></span>
+      {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div><p style="font-size:40px;" class="jumbotron">No Feedbacks yet</p>
+
+</div>
+    {% endif %}
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
+
+<!--/.Carousel Wrapper-->
+
+    </main>
+   <footer>
+    <!-- Footer Start-->
+    <br>
+      <div class="footer-main footer-bg">
+        <div class="footer-area footer-padding">
+            
+
+
+                </div>
+            </div>
+        </div>
+        <!-- footer-bottom aera -->
+        <div class="footer-bottom-area footer-bg">
+            <div class="container">
+                <div class="footer-border">
+                     <div class="row d-flex align-items-center">
+                         <div class="col-xl-12 ">
+                             <div class="footer-copy-right text-center">
+                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+      </div>
+     <!-- Footer End-->
+   </footer>
+
+	<!-- JS here -->
+
+		<!-- All JS Custom Plugins Link Here here -->
+        <script src="{% static 'home/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+		<!-- Jquery, Popper, Bootstrap -->
+		<script src="{% static 'home/js/vendor/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'home/js/popper.min.js' %}"></script>
+        <script src="{% static 'home/js/bootstrap.min.js' %}"></script>
+	    <!-- Jquery Mobile Menu -->
+        <script src="{% static 'home/js/jquery.slicknav.min.js' %}"></script>
+
+		<!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="{% static 'home/js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'home/js/slick.min.js' %}"></script>
+        <!-- Date Picker -->
+        <script src="{% static 'home/js/gijgo.min.js' %}"></script>
+		<!-- One Page, Animated-HeadLin -->
+        <script src="{% static 'home/js/wow.min.js' %}"></script>
+		<script src="{% static 'home/js/animated.headline.js' %}"></script>
+        <script src="{% static 'home/js/jquery.magnific-popup.js' %}"></script>
+
+		<!-- Scrollup, nice-select, sticky -->
+        <script src="{% static 'home/js/jquery.scrollUp.min.js' %}"></script>
+        <script src="{% static 'home/js/jquery.nice-select.min.js' %}"></script>
+		<script src="{% static 'home/js/jquery.sticky.js' %}"></script>
+
+        <!-- contact js -->
+        <script src="{% static 'home/js/contact.js' %}"></script>
+        <script src="{% static 'home/js/jquery.form.js' %}"></script>
+        <script src="{% static 'home/js/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'home/js/mail-script.js' %}"></script>
+        <script src="{% static 'home/js/jquery.ajaxchimp.min.js' %}"></script>
+
+		<!-- Jquery Plugins, main Jquery -->
+        <script src="{% static 'home/js/plugins.js' %}"></script>
+        <script src="{% static 'home/js/main.js' %}"></script>
+
+    </body>
+</html>
